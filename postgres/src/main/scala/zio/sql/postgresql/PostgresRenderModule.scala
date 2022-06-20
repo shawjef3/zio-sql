@@ -2,13 +2,14 @@ package zio.sql.postgresql
 
 import java.time._
 import java.time.format.DateTimeFormatter
-
 import zio.Chunk
 import zio.schema._
 import zio.schema.StandardType._
 import zio.sql.driver.Renderer
 
-trait PostgresRenderModule extends PostgresSqlModule { self =>
+trait PostgresRenderModule
+  extends PostgresSqlModule
+    with PostgresChannelModule { self =>
 
   override def renderRead(read: self.Read[_]): String = {
     implicit val render: Renderer = Renderer()
@@ -511,7 +512,7 @@ trait PostgresRenderModule extends PostgresSqlModule { self =>
       table match {
         case Table.DialectSpecificTable(tableExtension) =>
           tableExtension match {
-            case PostgresSpecific.PostgresSpecificTable.LateraLTable(left, derivedTable) =>
+            case PostgresSpecific.PostgresSpecificTable.LateralTable(left, derivedTable) =>
               renderTable(left)
 
               render(" ,lateral ")

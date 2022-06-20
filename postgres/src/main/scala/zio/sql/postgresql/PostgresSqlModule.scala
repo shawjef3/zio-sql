@@ -23,7 +23,7 @@ trait PostgresSqlModule extends Sql { self =>
     object PostgresSpecificTable {
       import scala.language.implicitConversions
 
-      sealed case class LateraLTable[A, B](left: Table.Aux[A], right: Table.Aux[B])
+      sealed case class LateralTable[A, B](left: Table.Aux[A], right: Table.Aux[B])
           extends PostgresSpecificTable[A with B] { self =>
 
         override type ColumnHead = left.ColumnHead
@@ -60,7 +60,7 @@ trait PostgresSqlModule extends Sql { self =>
           right: Table.DerivedTable[Out, Read[Out]]
         ): Table.DialectSpecificTable[A with right.TableType] = {
 
-          val tableExtension = LateraLTable[A, right.TableType](
+          val tableExtension = LateralTable[A, right.TableType](
             left,
             right
           )
